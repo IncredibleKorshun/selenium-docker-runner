@@ -1,24 +1,7 @@
 services:
-  hub:
-    image: seleniarm/hub:4.20
-  chrome:
-    image: seleniarm/node-chromium:4.20
-    shm_size: "2g"
-    depends_on:
-      - hub
-    deploy:
-      replicas: 2
-    environment:
-      - SE_EVENT_BUS_HOST=hub
-      - SE_EVENT_BUS_PUBLISH_PORT=4442
-      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
-      - SE_NODE_MAX_SESSIONS=5
   firefox:
     image: seleniarm/node-firefox:4.20
     shm_size: "2g"
-    depends_on:
-      - hub
     deploy:
       replicas: 2
     environment:
@@ -27,8 +10,6 @@ services:
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
   vendor-portal:
     image: nikitosnegritos/selenium
-    depends_on:
-      - chrome
     environment:
       - BROWSER=chrome
       - HUB_HOST=hub
@@ -38,8 +19,6 @@ services:
       - ./output/vendor-portal:/home/selenium-docker/test-output
   flight-reservation:
     image: nikitosnegritos/selenium
-    depends_on:
-      - firefox
     environment:
       - BROWSER=firefox
       - HUB_HOST=hub
